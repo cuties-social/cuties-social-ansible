@@ -9,7 +9,6 @@
   shell: "./build_tar_files.sh"
   args:
     chdir: "{{ mastodon_home }}/custom-emojis"
-  ignore_errors: true
 
 - name: get archives
   find:
@@ -17,7 +16,7 @@
   register: picture_archives
 
 - name: install custom emojis
-  shell: "{{ mastodon_home }}/.rbenv/shims/bundle exec bin/tootctl emoji import {{ item.path }} --overwrite --category {{ item.path | regex_replace('(.*)build\/') | regex_replace('.tar.gz$') }}"
+  shell: "{{ mastodon_home }}/.rbenv/shims/bundle exec bin/tootctl emoji import {{ item.path }} --overwrite --category {{ item.path | regex_replace('(.*)build\\/') | regex_replace('.tar.gz$') }}"
   args:
     chdir: "{{ mastodon_home }}/{{ mastodon_path }}"
   environment:
