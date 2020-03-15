@@ -27,6 +27,6 @@
   vars_files:
     - ["vars/{{ ansible_os_family|lower }}_vars.yml"]
   roles:
-    - web
+    - mastodon
   tags:
-    - web
+    - mastodon
