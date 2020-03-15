@@ -1,0 +1,15 @@
+---
+- name: Install packages
+  package:
+    name: "{{ item.package }}"
+    update_cache: yes
+    cache_valid_time: 3600
+    state: latest
+    install_recommends: no
+  with_items: "{{ packages }}"
+
+- name: nodejs alternative
+  alternatives:
+    name: node
+    link: /usr/bin/node
+    path: /usr/bin/nodejs

@@ -1,0 +1,32 @@
+---
+- stat: path=/etc/letsencrypt/live/{{ mastodon_host }}/fullchain.pem
+  register: letsencrypt_cert
+
+- name: Copy letsencrypt nginx config
+  template:
+    src: nginx/letsencrypt.conf.j2
+    dest: /etc/nginx/sites-available/mastodon.conf
+  when: not letsencrypt_cert.stat.exists
+
+- name: Symlink enabled site
+  file:
+    src: "/etc/nginx/sites-available/mastodon.conf"
+    dest: "/etc/nginx/sites-enabled/mastodon.conf"
+    state: link
+  when: not letsencrypt_cert.stat.exists
+
+- name: Reload nginx
+  command: "systemctl reload nginx"
+
+- name: Install letsencrypt cert
+  command: certbot certonly -n --webroot -d {{ mastodon_host }} -w {{ mastodon_home }}/{{ mastodon_path }}/public/ --email "webmaster@{{ mastodon_host }}" --agree-tos
+  when: not letsencrypt_cert.stat.exists
+  notify:
+  - reload nginx
+
+- name: Letsencrypt Job
+  cron:
+    name: "certbot renew"
+    minute: "15"
+    hour: "0"
+    job: "letsencrypt renew && service nginx reload"

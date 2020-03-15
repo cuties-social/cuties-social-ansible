@@ -1,0 +1,55 @@
+ubuntu_codename: "bionic"
+mastodon_db_login_unix_socket: '/var/run/postgresql'
+
+packages:
+  - package: "autoconf"
+  - package: "bison"
+  - package: "build-essential"
+  - package: "curl"
+  - package: "cron"
+  - package: "ffmpeg"
+  - package: "file"
+  - package: "g++"
+  - package: "gcc"
+  - package: "git"
+  - package: "imagemagick"
+  - package: "libffi-dev"
+  - package: "libgdbm-dev"
+  - package: "libgdbm5"
+  - package: "libicu-dev"
+  - package: "libidn11-dev"
+  - package: "libncurses5-dev"
+  - package: "libpq-dev"
+  - package: "libprotobuf-dev"
+  - package: "libreadline-dev"
+  - package: "libssl-dev"
+  - package: "libxml2-dev"
+  - package: "libxslt1-dev"
+  - package: "libyaml-dev"
+  - package: "nginx"
+  - package: "nodejs"
+  - package: "pkg-config"
+  - package: "protobuf-compiler"
+  - package: "sudo"
+  - package: "systemd"
+  - package: "ufw"
+  - package: "unattended-upgrades"
+  - package: "yarn"
+  - package: "zlib1g-dev"
+  - package: "certbot"
+  - package: "python-certbot-nginx"
+  - package: "python3-certbot-nginx"
+
+
+postgres:
+  packages:
+    - package: "libpq-dev"
+    - package: "postgresql"
+    - package: "postgresql-contrib"
+    - package: "python3-psycopg2"
+    - package: "sudo"
+
+redis:
+  packages:
+    - package: "redis-server"
+    - package: "redis-tools"

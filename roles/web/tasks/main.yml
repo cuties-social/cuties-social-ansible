@@ -1,0 +1,24 @@
+---
+- include: repositories.yml
+  when: os_family == "debian"
+
+- include: packages.yml
+  become: true
+- include: ufw.yml
+  become: true
+  tags:
+    - firewall
+- include: user.yml
+  become: true
+- include: ruby.yml
+  become: true
+  become_user: mastodon
+- include: mastodon.yml
+  become: true
+  become_user: mastodon
+- include: letsencrypt.yml
+  become: true
+  tags:
+    - letsencrypt 
+- include: nginx.yml
+  become: true

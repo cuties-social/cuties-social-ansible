@@ -1,0 +1,77 @@
+---
+# remove user when remove variable is defined
+- name: remove user
+  user: state=absent remove=yes
+        name={{ item.name }}
+  when: item.state == 'absent'
+  with_items:
+  - "{{ users }}"
+
+- name: get bash's path
+  shell: command -v bash
+  register: bash_path
+  changed_when: false
+
+- name: create user
+  user: state=present
+        name="{{ item.name }}"
+        groups="sudo,adm" append=yes
+        shell={{ item.shell | default(bash_path.stdout) }}
+  with_items:
+  - "{{ users }}"
+  when: item.state != 'absent'
+
+- name: add user's authorized_keys
+  authorized_key: user="{{ item.name }}" manage_dir=true key="{{ item.public_key }}"
+                  state=present exclusive=yes
+  with_items:
+  - "{{ users }}"
+  when: item.state != 'absent' and item.public_key is defined and item.public_key != ''
+
+- name: add user to root's authorized_keys
+  authorized_key: user="root" manage_dir=true key="{{ item.public_key }}"
+                  state=present
+  with_items:
+  - "{{ users }}"
+  when: item.state != 'absent' and item.public_key is defined and item.public_key != ''
+
+- name: remove user from root's authorized_keys
+  authorized_key: user="root" manage_dir=true key="{{ item.public_key }}"
+                state=absent
+  with_items:
+  - "{{ users }}"
+  when: item.state == 'absent' and item.public_key is defined and item.public_key != ''
+
+- name: create pve admin-group
+  shell:
+    cmd: 'pveum groupadd admin -comment "System Administrators"'
+  when: "'proxmox' in group_names"
+  ignore_errors: True
+
+- name: give pve admin-group privileges
+  shell:
+    cmd: 'pveum aclmod / -group admin -role Administrator'
+  when: "'proxmox' in group_names"
+
+- name: create pve user
+  shell:
+    cmd: 'pveum useradd {{ item.name }}@pam'
+  with_items:
+  - "{{ users }}"
+  when: item.state != 'absent' and 'proxmox' in group_names
+  ignore_errors: True
+
+- name: disable pve user
+  shell:
+    cmd: 'pveum usermod {{ item.name }}@pam -enable 0'
+  with_items:
+  - "{{ users }}"
+  when: item.state == 'absent' and 'proxmox' in group_names
+  ignore_errors: True
+
+- name: add user to pve admin group
+  shell:
+    cmd: 'pveum usermod {{ item.name }}@pam -group admin'
+  with_items:
+  - "{{ users }}"
+  when: item.state != 'absent' and 'proxmox' in group_names

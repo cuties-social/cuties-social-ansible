@@ -1,0 +1,17 @@
+---
+- name: Copy nginx config
+  template:
+    src: nginx/mastodon.conf.j2
+    dest: /etc/nginx/sites-available/mastodon.conf
+  when:
+    - mastodon_host is defined
+
+- name: Symlink enabled site
+  file:
+    src: "/etc/nginx/sites-available/mastodon.conf"
+    dest: "/etc/nginx/sites-enabled/mastodon.conf"
+    state: link
+  when:
+    - mastodon_host is defined
+  notify:
+  - reload nginx
