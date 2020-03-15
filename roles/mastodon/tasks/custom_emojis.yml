@@ -23,3 +23,10 @@
     RAILS_ENV: production
   when: item.path != mastodon_home+'/custom-emojis/build/uncategorized.tar.gz'
   with_items: "{{ picture_archives.files }}"
+
+- name: install custom uncategorized emojis
+  shell: "{{ mastodon_home }}/.rbenv/shims/bundle exec bin/tootctl emoji import  {{ mastodon_home }}/custom-emojis/build/uncategorized.tar.gz --overwrite"
+  args:
+    chdir: "{{ mastodon_home }}/{{ mastodon_path }}"
+  environment:
+    RAILS_ENV: production
