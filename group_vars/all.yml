@@ -83,6 +83,8 @@ mastodon_smtp_from: "mastodon@{{ mastodon_host }}"
 
 ansible_python_interpreter: "/usr/bin/python3"
 
+motd_path: ../../../templates/motd
+
 users:
 - name: 'n0emis'
   state: 'present'
