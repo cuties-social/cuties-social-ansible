@@ -53,10 +53,12 @@ server {
     try_files $uri @proxy;
   }
 
-{% if rickroll_url is defined %}
+{% if rickroll_urls is defined %}
+{% for rickroll_url in rickroll_urls %}
   location {{ rickroll_url }} {
     try_files /rickroll.mp4 $uri =404;
   }
+{% endfor %}
 {% endif %}
 
   location ~ ^/(emoji|packs|system/accounts/avatars|system/media_attachments/files) {
