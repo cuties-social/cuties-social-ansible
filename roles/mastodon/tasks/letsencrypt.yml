@@ -1,5 +1,6 @@
 ---
-- stat: path=/etc/letsencrypt/live/{{ mastodon_host }}/fullchain.pem
+- name: Check for letsencrypt cert
+  stat: path=/etc/letsencrypt/live/{{ mastodon_host }}/fullchain.pem
   register: letsencrypt_cert
 
 - name: Copy letsencrypt nginx config
