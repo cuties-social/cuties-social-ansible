@@ -53,6 +53,12 @@ server {
     try_files $uri @proxy;
   }
 
+{% if rickroll_url is defined %}
+  location {{ rickroll_url }} {
+    try_files /rickroll.mp4 $uri =404;
+  }
+{% endif %}
+
   location ~ ^/(emoji|packs|system/accounts/avatars|system/media_attachments/files) {
     add_header Cache-Control "public, max-age=31536000, immutable";
     try_files $uri @proxy;

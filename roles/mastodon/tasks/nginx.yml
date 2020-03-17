@@ -1,4 +1,11 @@
 ---
+- name: download rickroll.mp4
+  get_url:
+    url: https://shortlink.l12c.eu/rickroll.mp4
+    dest: /home/mastodon/live/public/rickroll.mp4
+  when:
+    - rickroll_url is defined
+
 - name: Copy nginx config
   template:
     src: nginx/mastodon.conf.j2

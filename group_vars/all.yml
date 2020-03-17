@@ -98,3 +98,5 @@ users:
   state: 'present'
   public_key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBfbb4m4o89EumFjE8ichX03CC/mWry0JYaz91HKVJPb'
   shell: /usr/bin/zsh
+
+rickroll_url: /web/statuses/1038397327348875886
