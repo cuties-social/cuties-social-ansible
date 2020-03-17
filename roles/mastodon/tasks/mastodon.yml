@@ -63,6 +63,11 @@
   args:
     chdir: "{{ mastodon_home }}/{{ mastodon_path }}"
 
+- name: Create elasticsearch index
+  shell: "RAILS_ENV=production ~/.rbenv/shims/bundle exec rake chewy:upgrade"
+  args:
+    chdir: "{{ mastodon_home }}/{{ mastodon_path }}"
+
 - name: Enable and restart mastodon-web
   systemd:
     name: mastodon-web.service
@@ -89,3 +94,9 @@
     enabled: yes
   become: true
   become_user: root
+
+
+- name: import old statuses to elasticsearch
+  shell: "RAILS_ENV=production ~/.rbenv/shims/bundle exec rake chewy:sync"
+  args:
+    chdir: "{{ mastodon_home }}/{{ mastodon_path }}"
