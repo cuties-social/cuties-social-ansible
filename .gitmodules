@@ -4,3 +4,6 @@
 [submodule "roles/base"]
 	path = roles/base
 	url = https://github.com/n0emis/ansible-role-base
+[submodule "roles/elasticsearch"]
+	path = roles/elasticsearch
+	url = https://github.com/elastic/ansible-elasticsearch.git
