@@ -3,6 +3,7 @@
   hosts: all
   roles:
     - init
+    - jnv.unattended-upgrades
     - base
   tags:
     - base
