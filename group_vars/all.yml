@@ -84,6 +84,8 @@ mastodon_es_enabled: true
 mastodon_es_host: localhost
 mastodon_es_port: 9200
 
+mastodon_character_limit: 5000
+
 ansible_python_interpreter: "/usr/bin/python3"
 
 motd_path: ../../../templates/motd

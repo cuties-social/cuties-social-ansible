@@ -4,6 +4,7 @@
     repo: "https://github.com/tootsuite/mastodon.git"
     dest: "{{ mastodon_home }}/{{mastodon_path}}"
     clone: true
+    force: yes
 
 - name: Update to latest version
   shell: "git fetch; git checkout $(git tag -l | grep -v 'rc[0-9]*$' | sort -V | tail -n 1)"
@@ -52,6 +53,8 @@
   template:
     src: mastodon/.env.production.j2
     dest: "{{ mastodon_home }}/{{ mastodon_path }}/.env.production"
+
+- include: character_limit.yml
 
 - name: Migrate database
   shell: "RAILS_ENV=production ~/.rbenv/shims/bundle exec rails db:migrate"
