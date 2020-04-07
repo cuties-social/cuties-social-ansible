@@ -1,6 +1,6 @@
-ruby_version: 2.6.5
+ruby_version: 2.6.6
 rbenv_version: v1.1.2
-ruby_build_version: v20191004
+ruby_build_version: v20200401
 os_family: "{{ ansible_os_family|lower }}"
 mastodon_user: "mastodon"
 mastodon_home: "/home/{{ mastodon_user }}"
@@ -96,14 +96,17 @@ users:
   public_key: |
     ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEcOPtW5FWNIdlMQFoqeyA1vHw+cA8ft8oXSbXPzQNL9 n0emis@n0emis.eu
   shell: /usr/bin/zsh
+  sudo: yes
 - name: 'isa'
   state: 'present'
   public_key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGrvhqC/tZzpLMs/qy+1xNSVi2mfn8LXPIEhh7dcGn9e'
   shell: /usr/bin/zsh
+  sudo: yes
 - name: 'e1mo'
   state: 'present'
   public_key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBfbb4m4o89EumFjE8ichX03CC/mWry0JYaz91HKVJPb'
   shell: /usr/bin/zsh
+  sudo: yes
 
 rickroll_urls:
 - /web/statuses/1038397327348875886
