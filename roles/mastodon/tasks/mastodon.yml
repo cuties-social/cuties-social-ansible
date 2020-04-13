@@ -54,7 +54,8 @@
     src: mastodon/.env.production.j2
     dest: "{{ mastodon_home }}/{{ mastodon_path }}/.env.production"
 
-- include: character_limit.yml
+- include_tasks: patches/main.yml
+  when: mastodon_patches_enable
 
 - name: Migrate database
   shell: "RAILS_ENV=production ~/.rbenv/shims/bundle exec rails db:migrate"
