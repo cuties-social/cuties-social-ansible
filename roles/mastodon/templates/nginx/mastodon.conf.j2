@@ -25,7 +25,7 @@ server {
   ssl_prefer_server_ciphers on;
   ssl_session_cache shared:SSL:10m;
 
-{% if disable_letsencrypt != "true" %}
+{% if not (disable_letsencrypt | bool) %}
   ssl_certificate     /etc/letsencrypt/live/{{ mastodon_host }}/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/{{ mastodon_host }}/privkey.pem;
 {% endif %}
@@ -45,7 +45,8 @@ server {
   gzip_http_version 1.1;
   gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
 
-{% if !(disable_hsts | bool) %}
+{% if not (disable_hsts | bool) %}
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always; 
   add_header Strict-Transport-Security "max-age=31536000";
 {% endif %}
 
