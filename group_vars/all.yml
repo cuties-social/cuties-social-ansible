@@ -85,7 +85,7 @@ mastodon_es_host: localhost
 mastodon_es_port: 9200
 
 mastodon_patches_enable: true
-mastodon_character_limit: 5000
+mastodon_status_character_limit: 5000
 
 ansible_python_interpreter: "/usr/bin/python3"
 
