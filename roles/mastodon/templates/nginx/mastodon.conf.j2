@@ -45,7 +45,7 @@ server {
   gzip_http_version 1.1;
   gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
 
-{% if disable_hsts == "true" %}
+{% if !(disable_hsts | bool) %}
   add_header Strict-Transport-Security "max-age=31536000";
 {% endif %}
 
