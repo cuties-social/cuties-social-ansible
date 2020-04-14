@@ -1,6 +1,7 @@
 ---
 - import_tasks: character_limit.yml
 - import_tasks: poll_option_limit.yml
+- import_tasks: userdata.yml
 
 - set_fact:
     additional_serializers: :max_toot_chars, :min_poll_options, :max_poll_options

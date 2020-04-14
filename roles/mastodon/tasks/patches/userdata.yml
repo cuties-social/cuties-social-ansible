@@ -1,0 +1,45 @@
+---
+- name: patch account model 1/5
+  blockinfile:
+    path: "{{ mastodon_home }}/{{mastodon_path}}/app/models/account.rb"
+    block: |
+        MAX_DISPLAY_NAME_LENGTH = (ENV['MAX_DISPLAY_NAME_CHARS'] || 30).to_i
+        MAX_NOTE_LENGTH = (ENV['MAX_BIO_CHARS'] || 512).to_i
+        MAX_FIELDS = (ENV['MAX_PROFILE_FIELDS'] || 4).to_i
+    insertafter: 'validates :username, presence: true'
+
+- name: patch account model 2/5
+  lineinfile:
+    path: "{{ mastodon_home }}/{{mastodon_path}}/app/models/account.rb"
+    regexp: 'validates :display_name, length: { maximum: .* }, if: -> { local\? && will_save_change_to_display_name\? }'
+    line: '  validates :display_name, length: { maximum: MAX_DISPLAY_NAME_LENGTH }, if: -> { local? && will_save_change_to_display_name? }'
+
+- name: patch account model 3/5
+  lineinfile:
+    path: "{{ mastodon_home }}/{{mastodon_path}}/app/models/account.rb"
+    regexp: 'validates :note, note_length: { maximum: .* }, if: -> { local\? && will_save_change_to_note\? }'
+    line: '  validates :note, note_length: { maximum: MAX_NOTE_LENGTH }, if: -> { local? && will_save_change_to_note? }'
+
+- name: patch account model 4/5
+  lineinfile:
+    path: "{{ mastodon_home }}/{{mastodon_path}}/app/models/account.rb"
+    regexp: 'validates :fields, length: { maximum: .* }, if: -> { local\? && will_save_change_to_fields\? }'
+    line: '  validates :fields, length: { maximum: MAX_FIELDS }, if: -> { local? && will_save_change_to_fields? }'
+
+- name: patch account model 5/5
+  lineinfile:
+    path: "{{ mastodon_home }}/{{mastodon_path}}/app/models/account.rb"
+    regexp: DEFAULT_FIELDS_SIZE =
+    line: '  DEFAULT_FIELDS_SIZE = MAX_FIELDS'
+
+- name: patch profile page 1/2
+  lineinfile:
+    path: "{{ mastodon_home }}/{{mastodon_path}}/app/views/settings/profiles/show.html.haml"
+    regexp: '= f.input :display_name, wrapper: :with_label, input_html: { maxlength: .* }, hint: false'
+    line: '      = f.input :display_name, wrapper: :with_label, input_html: { maxlength: Account::MAX_DISPLAY_NAME_LENGTH }, hint: false'
+
+- name: patch profile page 2/2
+  lineinfile:
+    path: "{{ mastodon_home }}/{{mastodon_path}}/app/views/settings/profiles/show.html.haml"
+    regexp: '= f.input :note, wrapper: :with_label, input_html: { maxlength: .* }, hint: false'
+    line: '      = f.input :note, wrapper: :with_label, input_html: { maxlength: Account::MAX_NOTE_LENGTH }, hint: false'

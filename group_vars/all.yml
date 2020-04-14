@@ -88,6 +88,8 @@ mastodon_patches_enable: true
 mastodon_status_character_limit: 5000
 mastodon_poll_options_min: 1
 mastodon_poll_options_max: 10
+mastodon_bio_character_limit: 1000
+mastodon_max_profile_fields: 10
 
 ansible_python_interpreter: "/usr/bin/python3"
 
