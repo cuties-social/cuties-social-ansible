@@ -10,7 +10,7 @@ server {
 
   # Useful for Let's Encrypt
   location /.well-known/acme-challenge/ { 
-    alias {{ mastodon_home }}/{{ mastodon_path }}/public/.well-known/acme-challenge/;
+    alias {{ mastodon_path }}/public/.well-known/acme-challenge/;
   }
   location / { return 301 https://$host$request_uri; }
 }
@@ -34,7 +34,7 @@ server {
   sendfile             on;
   client_max_body_size 8m;
 
-  root {{ mastodon_home }}/{{ mastodon_path }}/public;
+  root {{ mastodon_path }}/public;
 
   gzip on;
   gzip_disable "msie6";
