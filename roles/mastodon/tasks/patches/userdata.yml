@@ -43,3 +43,15 @@
     path: "{{ mastodon_home }}/{{mastodon_path}}/app/views/settings/profiles/show.html.haml"
     regexp: '= f.input :note, wrapper: :with_label, input_html: { maxlength: .* }, hint: false'
     line: '      = f.input :note, wrapper: :with_label, input_html: { maxlength: Account::MAX_NOTE_LENGTH }, hint: false'
+
+- name: patch account spec 1/2
+  lineinfile:
+    path: "{{ mastodon_home }}/{{mastodon_path}}/spec/models/account_spec.rb"
+    regexp: "it 'is invalid if the note is longer than 500 characters' do"
+    line: "      it 'is invalid if the note is longer than {{ mastodon_bio_character_limit }} characters' do"
+
+- name: patch account spec 2/2
+  lineinfile:
+    path: "{{ mastodon_home }}/{{mastodon_path}}/spec/models/account_spec.rb"
+    regexp: account = Fabricate.build\(:account, note
+    line: '        account = Fabricate.build(:account, note: Faker::Lorem.characters({{ mastodon_bio_character_limit+1 }}))'
