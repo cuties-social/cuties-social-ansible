@@ -1,47 +1,18 @@
 ---
-- name: patch initial state serializer 1/2
-  blockinfile:
-    path: "{{ mastodon_home }}/{{mastodon_path}}/app/serializers/initial_state_serializer.rb"
-    block: |
-        def max_toot_chars
-          StatusLengthValidator::MAX_CHARS
-        end
-    insertbefore: 'private'
-
-- name: patch initial state serializer 2/2
-  lineinfile:
-    path: "{{ mastodon_home }}/{{mastodon_path}}/app/serializers/initial_state_serializer.rb"
-    regexp: ':media_attachments, :settings'
-    line: '             :media_attachments, :settings, :max_toot_chars'
-
-- name: patch instance serializer 1/2
-  blockinfile:
-    path: "{{ mastodon_home }}/{{mastodon_path}}/app/serializers/rest/instance_serializer.rb"
-    block: |
-        def max_toot_chars
-          StatusLengthValidator::MAX_CHARS
-        end
-    insertbefore: 'private'
-
-- name: patch instance serializer 2/2
-  lineinfile:
-    path: "{{ mastodon_home }}/{{mastodon_path}}/app/serializers/rest/instance_serializer.rb"
-    regexp: ':languages, :registrations, :approval_required'
-    line: '             :languages, :max_toot_chars, :registrations, :approval_required'
-
 - name: patch status validator
   lineinfile:
     path: "{{ mastodon_home }}/{{mastodon_path}}/app/validators/status_length_validator.rb"
     regexp: 'MAX_CHARS = '
     line: '  MAX_CHARS = (ENV["MAX_TOOT_CHARS"] || 500).to_i'
 
-- name: patch compose form 1/3
+- name: patch compose form 1/4
   blockinfile:
     path: "{{ mastodon_home }}/{{mastodon_path}}/app/javascript/mastodon/features/compose/components/compose_form.js"
     block: |
         import initialState from '../../../initial_state';
         const maxChars = initialState.max_toot_chars;
     insertbefore: "import Icon from 'mastodon/components/icon';"
+    marker: "// {mark} ANSIBLE MANAGED BLOCK"
 
 - name: patch compose form 2/4
   lineinfile:

@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  tasks:
+  - set_fact:
+      mastodon_home: /home/n0emis
+      mastodon_path: programmieren/mastodon
+  - import_tasks: ../roles/mastodon/tasks/patches/main.yml

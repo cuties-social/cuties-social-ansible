@@ -1,2 +1,6 @@
 mastodon_status_character_limit: 500
 mastodon_patches_enable: false
+
+mastodon_status_character_limit: 500
+mastodon_poll_options_min: 2
+mastodon_poll_options_max: 4
