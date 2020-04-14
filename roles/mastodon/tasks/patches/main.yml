@@ -18,24 +18,24 @@
 
 - name: patch initial state serializer 1/2
   blockinfile:
-    path: "{{ mastodon_home }}/{{mastodon_path}}/app/serializers/initial_state_serializer.rb"
+    path: "{{ mastodon_path }}/app/serializers/initial_state_serializer.rb"
     block: "{{ additional_serializers_definition }}"
     insertbefore: 'private'
 
 - name: patch initial state serializer 2/2
   lineinfile:
-    path: "{{ mastodon_home }}/{{mastodon_path}}/app/serializers/initial_state_serializer.rb"
+    path: "{{ mastodon_path }}/app/serializers/initial_state_serializer.rb"
     regexp: ':media_attachments, :settings'
     line: '             :media_attachments, :settings, {{ additional_serializers }}'
 
 - name: patch instance serializer 1/2
   blockinfile:
-    path: "{{ mastodon_home }}/{{mastodon_path}}/app/serializers/rest/instance_serializer.rb"
+    path: "{{ mastodon_path }}/app/serializers/rest/instance_serializer.rb"
     block: "{{ additional_serializers_definition }}"
     insertbefore: 'private'
 
 - name: patch instance serializer 2/2
   lineinfile:
-    path: "{{ mastodon_home }}/{{mastodon_path}}/app/serializers/rest/instance_serializer.rb"
+    path: "{{ mastodon_path }}/app/serializers/rest/instance_serializer.rb"
     regexp: ':languages, :registrations, :approval_required'
     line: '             :languages, :registrations, :approval_required, {{ additional_serializers }}'

@@ -1,13 +1,13 @@
 ---
 - name: patch status validator
   lineinfile:
-    path: "{{ mastodon_home }}/{{mastodon_path}}/app/validators/status_length_validator.rb"
+    path: "{{ mastodon_path }}/app/validators/status_length_validator.rb"
     regexp: 'MAX_CHARS = '
     line: '  MAX_CHARS = (ENV["MAX_TOOT_CHARS"] || 500).to_i'
 
 - name: patch compose form 1/4
   blockinfile:
-    path: "{{ mastodon_home }}/{{mastodon_path}}/app/javascript/mastodon/features/compose/components/compose_form.js"
+    path: "{{ mastodon_path }}/app/javascript/mastodon/features/compose/components/compose_form.js"
     block: |
         import initialState from '../../../initial_state';
         const maxChars = initialState.max_toot_chars;
@@ -16,18 +16,18 @@
 
 - name: patch compose form 2/4
   lineinfile:
-    path: "{{ mastodon_home }}/{{mastodon_path}}/app/javascript/mastodon/features/compose/components/compose_form.js"
+    path: "{{ mastodon_path }}/app/javascript/mastodon/features/compose/components/compose_form.js"
     regexp: if \(isSubmitting \|\| isUploading \|\| isChangingUpload \|\| length\(fulltext\) > .* \|\| \(fulltext.length !== 0 && fulltext.trim\(\).length === 0 && !anyMedia\)\) {
     line: "    if (isSubmitting || isUploading || isChangingUpload || length(fulltext) > maxChars || (fulltext.length !== 0 && fulltext.trim().length === 0 && !anyMedia)) {"
 
 - name: patch compose form 3/4
   lineinfile:
-    path: "{{ mastodon_home }}/{{mastodon_path}}/app/javascript/mastodon/features/compose/components/compose_form.js"
+    path: "{{ mastodon_path }}/app/javascript/mastodon/features/compose/components/compose_form.js"
     regexp: const disabledButton = disabled \|\| this.props.isUploading \|\| this.props.isChangingUpload \|\| length\(text\) > .* \|\| \(text.length !== 0 && text.trim\(\).length === 0 && !anyMedia\);
     line: "    const disabledButton = disabled || this.props.isUploading || this.props.isChangingUpload || length(text) > maxChars || (text.length !== 0 && text.trim().length === 0 && !anyMedia);"
 
 - name: patch compose form 4/4
   lineinfile:
-    path: "{{ mastodon_home }}/{{mastodon_path}}/app/javascript/mastodon/features/compose/components/compose_form.js"
+    path: "{{ mastodon_path }}/app/javascript/mastodon/features/compose/components/compose_form.js"
     regexp: <div className='character-counter__wrapper'><CharacterCounter max=\{.*\} text={text} \/><\/div>
     line: "         <div className='character-counter__wrapper'><CharacterCounter max={maxChars} text={text} /></div>"
