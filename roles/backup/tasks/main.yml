@@ -2,7 +2,7 @@
 - name: Copy ssh key for storagebox
   copy:
     content: "{{backup_ssh_key}}"
-    dest: {{mastodon_home}}/.ssh/id_rsa
+    dest: /root/.ssh/id_rsa
     owner: "{{mastodon_user}}"
     chmod: '0600'
 
