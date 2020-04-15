@@ -5,7 +5,7 @@ os_family: "{{ ansible_os_family|lower }}"
 mastodon_user: "mastodon"
 mastodon_home: "/home/{{ mastodon_user }}"
 mastodon_db_user: "{{ mastodon_user }}"
-mastodon_path: "live"
+mastodon_path: "{{ mastodon_home }}/live"
 mastodon_db: "{{ mastodon_user }}_cuties_social"
 mastodon_db_port: 5432
 disable_hsts: "false"
@@ -87,6 +87,11 @@ mastodon_es_port: 9200
 
 mastodon_patches_enable: true
 mastodon_status_character_limit: 5000
+mastodon_poll_options_min: 1
+mastodon_poll_options_max: 10
+mastodon_displayname_character_limit: 10
+mastodon_bio_character_limit: 1000
+mastodon_max_profile_fields: 10
 
 ansible_python_interpreter: "/usr/bin/python3"
 

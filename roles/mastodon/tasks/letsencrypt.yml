@@ -20,13 +20,13 @@
   command: "systemctl reload nginx"
 
 - name: Install letsencrypt cert
-  command: certbot certonly -n --webroot -d {{ mastodon_host }} -w {{ mastodon_home }}/{{ mastodon_path }}/public/ --email "webmaster@{{ mastodon_host }}" --rsa-key-size 4096 --agree-tos
+  command: certbot certonly -n --webroot -d {{ mastodon_host }} -w {{ mastodon_path }}/public/ --email "webmaster@{{ mastodon_host }}" --rsa-key-size 4096 --agree-tos
   when: not letsencrypt_cert.stat.exists and not enable_www_redirect
   notify:
   - reload nginx
 
 - name: Install letsencrypt cert
-  command: certbot certonly -n --webroot -d www.{{ mastodon_host }}-d {{ mastodon_host }} -w {{ mastodon_home }}/{{ mastodon_path }}/public/ --email "webmaster@{{ mastodon_host }}" --rsa-key-size 4096 --agree-tos
+  command: certbot certonly -n --webroot -d www.{{ mastodon_host }} -d {{ mastodon_host }} -w {{ mastodon_path }}/public/ --email "webmaster@{{ mastodon_host }}" --rsa-key-size 4096 --agree-tos
   when: not letsencrypt_cert.stat.exists and enable_www_redirect
   notify:
   - reload nginx

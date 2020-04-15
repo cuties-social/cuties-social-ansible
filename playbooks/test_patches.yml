@@ -1,0 +1,7 @@
+---
+# this playbook can be run with the following command:
+#   ansible-playbook playbooks/test_patches.yml -e mastodon_path=/home/n0emis/programmieren/mastodon
+
+- hosts: localhost
+  tasks:
+    - import_tasks: ../roles/mastodon/tasks/patches/main.yml

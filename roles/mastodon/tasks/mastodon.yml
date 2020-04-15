@@ -2,24 +2,24 @@
 - name: Clone mastodon
   git:
     repo: "https://github.com/tootsuite/mastodon.git"
-    dest: "{{ mastodon_home }}/{{mastodon_path}}"
+    dest: "{{ mastodon_path }}"
     clone: true
     force: yes
 
 - name: Update to latest version
   shell: "git fetch; git checkout $(git tag -l | grep -v 'rc[0-9]*$' | sort -V | tail -n 1)"
   args:
-    chdir: "{{ mastodon_home }}/{{ mastodon_path }}"
+    chdir: "{{ mastodon_path }}"
 
 - name: Bundle install
   shell: "~/.rbenv/shims/bundle install -j$(getconf _NPROCESSORS_ONLN) --deployment --without development test"
   args:
-    chdir: "{{ mastodon_home }}/{{ mastodon_path }}"
+    chdir: "{{ mastodon_path }}"
 
 - name: Yarn install
   command: yarn install --pure-lockfile
   args:
-    chdir: "{{ mastodon_home }}/{{ mastodon_path }}"
+    chdir: "{{ mastodon_path }}"
 
 - name: Install systemd sidekiq Service Files
   template:
@@ -47,12 +47,12 @@
     name: "media cleanup"
     minute: "15"
     hour: "1"
-    job: '/bin/bash -c ''export PATH="$HOME/.rbenv/bin:$PATH"; eval "$(rbenv init -)"; cd {{ mastodon_home }}/{{ mastodon_path }} && RAILS_ENV=production ./bin/tootctl media remove'''
+    job: '/bin/bash -c ''export PATH="$HOME/.rbenv/bin:$PATH"; eval "$(rbenv init -)"; cd {{ mastodon_path }} && RAILS_ENV=production ./bin/tootctl media remove'''
 
 - name: Install mastodon config
   template:
     src: mastodon/.env.production.j2
-    dest: "{{ mastodon_home }}/{{ mastodon_path }}/.env.production"
+    dest: "{{ mastodon_path }}/.env.production"
 
 - include_tasks: patches/main.yml
   when: mastodon_patches_enable
@@ -60,17 +60,17 @@
 - name: Migrate database
   shell: "RAILS_ENV=production ~/.rbenv/shims/bundle exec rails db:migrate"
   args:
-    chdir: "{{ mastodon_home }}/{{ mastodon_path }}"
+    chdir: "{{ mastodon_path }}"
 
 - name: Precompile assets
   shell: "RAILS_ENV=production ~/.rbenv/shims/bundle exec rails assets:precompile"
   args:
-    chdir: "{{ mastodon_home }}/{{ mastodon_path }}"
+    chdir: "{{ mastodon_path }}"
 
 - name: Create elasticsearch index
   shell: "RAILS_ENV=production ~/.rbenv/shims/bundle exec rake chewy:upgrade"
   args:
-    chdir: "{{ mastodon_home }}/{{ mastodon_path }}"
+    chdir: "{{ mastodon_path }}"
 
 - name: Enable and restart mastodon-web
   systemd:
@@ -103,4 +103,4 @@
 - name: import old statuses to elasticsearch
   shell: "RAILS_ENV=production ~/.rbenv/shims/bundle exec rake chewy:sync"
   args:
-    chdir: "{{ mastodon_home }}/{{ mastodon_path }}"
+    chdir: "{{ mastodon_path }}"

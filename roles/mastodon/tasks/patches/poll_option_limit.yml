@@ -1,0 +1,41 @@
+---
+- name: patch poll validator 1/3
+  lineinfile:
+    path: "{{ mastodon_path }}/app/validators/poll_validator.rb"
+    regexp: 'MAX_OPTIONS      = '
+    line: '  MAX_OPTIONS = (ENV["MAX_POLL_OPTIONS"] || 4).to_i'
+
+- name: patch poll validator 2/3
+  lineinfile:
+    path: "{{ mastodon_path }}/app/validators/poll_validator.rb"
+    regexp: 'MIN_OPTIONS = '
+    line: '  MIN_OPTIONS = (ENV["MIN_POLL_OPTIONS"] || 2).to_i'
+    insertbefore: 'MAX_OPTIONS = '
+
+- name: patch poll validator 3/3
+  lineinfile:
+    path: "{{ mastodon_path }}/app/validators/poll_validator.rb"
+    regexp: poll.errors.add\(:options, I18n.t\('polls.errors.too_few_options'\)\) unless poll.options.size
+    line: "    poll.errors.add(:options, I18n.t('polls.errors.too_few_options')) unless poll.options.size >= MIN_OPTIONS"
+
+- name: patch poll form 1/3
+  blockinfile:
+    path: "{{ mastodon_path }}/app/javascript/mastodon/features/compose/components/poll_form.js"
+    block: |
+        import initialState from '../../../initial_state';
+        const maxOptions = initialState.max_poll_options;
+        const minOptions = initialState.min_poll_options;
+    insertafter: "import classNames from 'classnames';"
+    marker: "// {mark} ANSIBLE MANAGED BLOCK"
+
+- name: patch poll form 2/3
+  lineinfile:
+    path: "{{ mastodon_path }}/app/javascript/mastodon/features/compose/components/poll_form.js"
+    regexp: <IconButton disabled={index .*} title={intl.formatMessage\(messages.remove_option\)} icon='times' onClick={this.handleOptionRemove} />
+    line: "          <IconButton disabled={index < minOptions} title={intl.formatMessage(messages.remove_option)} icon='times' onClick={this.handleOptionRemove} />"
+
+- name: patch poll form 3/3
+  lineinfile:
+    path: "{{ mastodon_path }}/app/javascript/mastodon/features/compose/components/poll_form.js"
+    regexp: <button disabled={options.size >= .*} className='button button-secondary' onClick={this.handleAddOption}><Icon id='plus' /> <FormattedMessage {...messages.add_option} /></button>
+    line: "          <button disabled={options.size >= maxOptions} className='button button-secondary' onClick={this.handleAddOption}><Icon id='plus' /> <FormattedMessage {...messages.add_option} /></button>"

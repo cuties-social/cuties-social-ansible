@@ -1,2 +1,41 @@
 ---
-- include: character_limit.yml
+- import_tasks: character_limit.yml
+- import_tasks: poll_option_limit.yml
+- import_tasks: userdata.yml
+
+- set_fact:
+    additional_serializers: :max_toot_chars, :min_poll_options, :max_poll_options
+    additional_serializers_definition: |
+        def max_toot_chars
+          StatusLengthValidator::MAX_CHARS
+        end
+        def min_poll_options
+          PollValidator::MIN_OPTIONS
+        end
+        def max_poll_options
+          PollValidator::MAX_OPTIONS
+        end
+
+- name: patch initial state serializer 1/2
+  blockinfile:
+    path: "{{ mastodon_path }}/app/serializers/initial_state_serializer.rb"
+    block: "{{ additional_serializers_definition }}"
+    insertbefore: 'private'
+
+- name: patch initial state serializer 2/2
+  lineinfile:
+    path: "{{ mastodon_path }}/app/serializers/initial_state_serializer.rb"
+    regexp: ':media_attachments, :settings'
+    line: '             :media_attachments, :settings, {{ additional_serializers }}'
+
+- name: patch instance serializer 1/2
+  blockinfile:
+    path: "{{ mastodon_path }}/app/serializers/rest/instance_serializer.rb"
+    block: "{{ additional_serializers_definition }}"
+    insertbefore: 'private'
+
+- name: patch instance serializer 2/2
+  lineinfile:
+    path: "{{ mastodon_path }}/app/serializers/rest/instance_serializer.rb"
+    regexp: ':languages, :registrations, :approval_required'
+    line: '             :languages, :registrations, :approval_required, {{ additional_serializers }}'
