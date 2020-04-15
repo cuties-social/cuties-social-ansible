@@ -25,7 +25,7 @@ server {
   ssl_prefer_server_ciphers on;
   ssl_session_cache shared:SSL:10m;
 
-{% if disable_letsencrypt != "true" %}
+{% if not (disable_letsencrypt | bool) %}
   ssl_certificate     /etc/letsencrypt/live/{{ mastodon_host }}/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/{{ mastodon_host }}/privkey.pem;
 {% endif %}
@@ -45,7 +45,8 @@ server {
   gzip_http_version 1.1;
   gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
 
-{% if !(disable_hsts | bool) %}
+{% if not (disable_hsts | bool) %}
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always; 
   add_header Strict-Transport-Security "max-age=31536000";
 {% endif %}
 
@@ -108,3 +109,41 @@ server {
 
   error_page 500 501 502 503 504 /500.html;
 }
+
+{% if enable_www_redirect is defined and enable_www_redirect | bool %}
+server {
+  listen 80;
+  listen [::]:80;
+  server_name www.{{ mastodon_host }};
+
+  # Useful for Let's Encrypt
+  location /.well-known/acme-challenge/ { 
+    alias {{ mastodon_home }}/{{ mastodon_path }}/public/.well-known/acme-challenge/;
+  }
+  location / { return 301 https://$host$request_uri; }
+}
+
+server {
+  listen 443 ssl http2;
+  listen [::]:443 ssl http2;
+  server_name www.{{ mastodon_host }};
+
+  ssl_protocols TLSv1.2 TLSv1.3;
+  ssl_ciphers HIGH:!MEDIUM:!LOW:!aNULL:!NULL:!SHA;
+  ssl_prefer_server_ciphers on;
+  ssl_session_cache shared:SSL:10m;
+
+{% if not (disable_letsencrypt | bool) %}
+  ssl_certificate     /etc/letsencrypt/live/{{ mastodon_host }}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/{{ mastodon_host }}/privkey.pem;
+{% endif %}
+
+{% if not (disable_hsts | bool) %}
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always; 
+  add_header Strict-Transport-Security "max-age=31536000";
+{% endif %}
+
+  location / { return 301 https://{{ mastodon_host }}$request_uri; }
+}
+
+{% endif %}
