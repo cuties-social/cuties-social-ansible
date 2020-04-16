@@ -1,0 +1,12 @@
+#!/bin/bash
+DATUM=$(date +"%Y-%m-%d")
+
+systemctl stop mastodon-*
+su - mastodon -c "cd {{mastodon_home}} && pg_dump -Fc {{mastodon_db}} > backup.dump"
+systemctl start mastodon-web mastodon-sidekiq mastodon-streaming
+
+rsync -e 'ssh -p23 -o StrictHostKeyChecking=no' -Prvh {{mastodon_home}}/backup.dump {{backup_target}}:$DATUM/.
+rsync -e 'ssh -p23 -o StrictHostKeyChecking=no' -Prvh {{mastodon_home}}/live {{backup_target}}:$DATUM/.
+rsync -e 'ssh -p23 -o StrictHostKeyChecking=no' -Prvh /etc/nginx/sites-available {{backup_target}}:$DATUM/.
+rsync -e 'ssh -p23 -o StrictHostKeyChecking=no' -Prvh /etc/elasticsearch/jvm.options {{backup_target}}:$DATUM/.
+rsync -e 'ssh -p23 -o StrictHostKeyChecking=no' -Prvh /var/lib/redis/dump.rdb {{backup_target}}:$DATUM/.

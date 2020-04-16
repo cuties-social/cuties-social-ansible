@@ -1,0 +1,19 @@
+---
+- name: Copy ssh key for storagebox
+  copy:
+    content: "{{backup_ssh_key}}"
+    dest: /root/.ssh/id_rsa
+    owner: "{{mastodon_user}}"
+    chmod: '0600'
+
+- name: Copy backupscript
+  template:
+    src: backup.sh.j2
+    dest: {{mastodon_home}}/backup.sh
+
+- name: Set Cronjob
+  cron:
+    name: "backup"
+    minute: "0"
+    hour: "3"
+    job: "{{mastodon_home}}/backup.sh > {{mastodon_home}}/backup.log 2>&1"
