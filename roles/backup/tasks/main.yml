@@ -4,12 +4,12 @@
     content: "{{backup_ssh_key}}"
     dest: /root/.ssh/id_rsa
     owner: "{{mastodon_user}}"
-    chmod: '0600'
+    mode: '0600'
 
 - name: Copy backupscript
   template:
     src: backup.sh.j2
-    dest: {{mastodon_home}}/backup.sh
+    dest: "{{mastodon_home}}/backup.sh"
 
 - name: Set Cronjob
   cron:
