@@ -10,6 +10,7 @@
   template:
     src: backup.sh.j2
     dest: "{{mastodon_home}}/backup.sh"
+    mode: '0755'
 
 - name: Set Cronjob
   cron:
