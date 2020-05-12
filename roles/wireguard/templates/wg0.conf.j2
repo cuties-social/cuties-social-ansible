@@ -1,0 +1,12 @@
+{{ ansible_managed | comment }}
+
+[Interface]
+Address = 192.168.123.2/32
+PrivateKey = {{ wireguard_private_key }}
+ListenPort = {{ wireguard_listen_port }} # Netzwerport
+
+# Client 1
+[Peer]
+Endpoint = {{ wireguard_endpoint_address }}
+PublicKey = {{ wireguard_endpoint_public_key }}
+AllowedIPs = 192.168.123.1/32

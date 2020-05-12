@@ -1,0 +1,42 @@
+---
+- name: Create temporary directory
+  tempfile:
+    state: directory
+  register: download_tempdir
+
+- name: Download node_exporter
+  get_url:
+    url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+    dest: "{{ download_tempdir.path}}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+    checksum: "sha256:{{ node_exporter_sha256 }}"
+
+- name: Unarchive node_exporter
+  unarchive:
+    src: "{{ download_tempdir.path }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+    dest: "{{ download_tempdir.path}}"
+    remote_src: yes
+
+- name: Create bin directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "/opt/prometheus/bin"
+
+- name: Move node_exporter binaries to opt
+  command: "mv -f {{ download_tempdir.path }}/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter /opt/prometheus/bin"
+
+- name: Distribute prometheus-node-exporter service
+  template:
+    src: templates/prometheus-node-exporter.service.j2
+    dest: "/etc/systemd/system/prometheus-node-exporter.service"
+    owner: root
+    group: root
+
+- name: Enable and restart services
+  service:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  with_items:
+    - prometheus-node-exporter
