@@ -47,7 +47,6 @@ server {
 
 {% if not (disable_hsts | bool) %}
   add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always; 
-  add_header Strict-Transport-Security "max-age=31536000";
 {% endif %}
 
   location / {
@@ -140,7 +139,6 @@ server {
 
 {% if not (disable_hsts | bool) %}
   add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always; 
-  add_header Strict-Transport-Security "max-age=31536000";
 {% endif %}
 
   location / { return 301 https://{{ mastodon_host }}$request_uri; }
