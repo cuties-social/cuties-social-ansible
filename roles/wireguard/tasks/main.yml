@@ -25,3 +25,8 @@
     mode: 0600 # contains private key
   notify:
     - restart wireguard
+
+- name: Allow traffic though wireguard in firewall
+  ufw:
+    rule: allow
+    from_ip: '192.168.123.1'
