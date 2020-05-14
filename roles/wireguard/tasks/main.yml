@@ -1,0 +1,27 @@
+---
+- name: Add the wireguard repo (Ubuntu)
+  when: ansible_distribution == 'Ubuntu'
+  apt_repository:
+    repo: 'ppa:wireguard/wireguard'
+    update_cache: yes
+
+- name: Install additional packages (Ubuntu)
+  when: ansible_distribution == 'Ubuntu'
+  apt:
+    pkg:
+      - linux-headers-generic
+      - wireguard-tools
+      - wireguard-dkms
+    state: present
+  notify:
+    - restart wireguard
+    - enable wireguard
+
+- name: create configuration file
+  template:
+    src: wg0.conf.j2
+    dest: /etc/wireguard/wg0.conf
+    owner: root
+    mode: 0600 # contains private key
+  notify:
+    - restart wireguard
