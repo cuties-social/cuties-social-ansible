@@ -1,8 +1,8 @@
 ---
 - name: download rickroll.mp4
-  get_url:
-    url: https://shortlink.l12c.eu/rickroll.mp4
-    dest: /home/mastodon/live/public/rickroll.mp4
+  copy:
+    src: nginx/rickroll.mp4
+    dest: {{ mastodon_path }}/public/rickroll.mp4
   when:
     - rickroll_urls is defined
 
