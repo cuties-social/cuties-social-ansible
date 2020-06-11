@@ -22,6 +22,8 @@
     - letsencrypt
 - include: nginx.yml
   become: true
+  tags:
+    - nginx
 - include: custom_emojis.yml
   become: true
   become_user: mastodon
