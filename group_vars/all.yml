@@ -10,7 +10,7 @@ mastodon_db: "{{ mastodon_user }}_cuties_social"
 mastodon_db_port: 5432
 disable_hsts: "false"
 disable_letsencrypt: "false"
-enable_www_redirect: "true"
+enable_www_redirect: "false"
 mastodon_db_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           63646261303530326663613262353536383931313838323536396535333036396138386134363763
