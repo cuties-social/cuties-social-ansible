@@ -8,10 +8,9 @@ server {
   listen [::]:80;
   server_name {{ mastodon_host }};
 
-  # Useful for Let's Encrypt
-  location /.well-known/acme-challenge/ { 
-    alias {{ mastodon_path }}/public/.well-known/acme-challenge/;
-  }
+	{% if not (disable_letsencrypt | bool) %}
+		include letsencrypt.conf;
+	{% endif %}
   location / { return 301 https://$host$request_uri; }
 }
 
@@ -116,9 +115,10 @@ server {
   server_name www.{{ mastodon_host }};
 
   # Useful for Let's Encrypt
-  location /.well-known/acme-challenge/ { 
-    alias {{ mastodon_home }}/{{ mastodon_path }}/public/.well-known/acme-challenge/;
-  }
+	{% if not (disable_letsencrypt | bool) %}
+		include letsencrypt.conf;
+	{% endif %}
+
   location / { return 301 https://$host$request_uri; }
 }
 
@@ -140,6 +140,10 @@ server {
 {% if not (disable_hsts | bool) %}
   add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always; 
 {% endif %}
+
+	{% if not (disable_letsencrypt | bool) %}
+		include letsencrypt.conf;
+	{% endif %}
 
   location / { return 301 https://{{ mastodon_host }}$request_uri; }
 }
