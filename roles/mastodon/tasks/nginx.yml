@@ -2,7 +2,7 @@
 - name: download rickroll.mp4
   copy:
     src: nginx/rickroll.mp4
-    dest: {{ mastodon_path }}/public/rickroll.mp4
+    dest: "{{ mastodon_path }}/public/rickroll.mp4"
   when:
     - rickroll_urls is defined
 
