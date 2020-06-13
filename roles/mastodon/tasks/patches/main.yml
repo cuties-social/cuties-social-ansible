@@ -43,5 +43,5 @@
 - name: patch obfuscatedCount
   lineinfile:
     path: "{{ mastodon_path }}/app/javascript/mastodon/components/status_action_bar.js"
-    regexp: "    return '1+';"
+    regexp: "return '1\\+';"
     line: "    return count;"
