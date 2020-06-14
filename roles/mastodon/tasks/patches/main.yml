@@ -39,3 +39,9 @@
     path: "{{ mastodon_path }}/app/serializers/rest/instance_serializer.rb"
     regexp: ':languages, :registrations, :approval_required'
     line: '             :languages, :registrations, :approval_required, {{ additional_serializers }}'
+
+- name: patch obfuscatedCount
+  lineinfile:
+    path: "{{ mastodon_path }}/app/javascript/mastodon/components/status_action_bar.js"
+    regexp: "return '1\\+';"
+    line: "    return count;"
