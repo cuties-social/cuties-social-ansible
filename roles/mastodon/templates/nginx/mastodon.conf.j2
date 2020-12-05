@@ -9,9 +9,10 @@ server {
   server_name {{ mastodon_host }};
 
   # Useful for Let's Encrypt
-  location /.well-known/acme-challenge/ { 
+  location /.well-known/acme-challenge/ {
     alias {{ mastodon_path }}/public/.well-known/acme-challenge/;
   }
+
   location / { return 301 https://$host$request_uri; }
 }
 
@@ -116,9 +117,10 @@ server {
   server_name www.{{ mastodon_host }};
 
   # Useful for Let's Encrypt
-  location /.well-known/acme-challenge/ { 
-    alias {{ mastodon_home }}/{{ mastodon_path }}/public/.well-known/acme-challenge/;
+  location /.well-known/acme-challenge/ {
+    alias {{ mastodon_path }}/public/.well-known/acme-challenge/;
   }
+
   location / { return 301 https://$host$request_uri; }
 }
 
