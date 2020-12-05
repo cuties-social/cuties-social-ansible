@@ -20,6 +20,8 @@ mastodon_db_password: !vault |
           37656139653634656435623732303039313162656664336565383438366661316136
 mastodon_host: cuties.social
 
+mastodon_acme_server: 'https://api.buypass.com/acme/directory'
+
 mastodon_secret_key: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           62393231363164343366333863663261623837663037663565656136613562353534313065623862
