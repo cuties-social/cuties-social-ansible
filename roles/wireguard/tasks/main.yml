@@ -1,10 +1,4 @@
 ---
-- name: Add the wireguard repo (Ubuntu)
-  when: ansible_distribution == 'Ubuntu'
-  apt_repository:
-    repo: 'ppa:wireguard/wireguard'
-    update_cache: yes
-
 - name: Install additional packages (Ubuntu)
   when: ansible_distribution == 'Ubuntu'
   apt:
