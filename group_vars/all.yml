@@ -7,11 +7,14 @@ mastodon_user: "mastodon"
 mastodon_home: "/home/{{ mastodon_user }}"
 mastodon_db_user: "{{ mastodon_user }}"
 mastodon_path: "{{ mastodon_home }}/live"
+mastodon_version: 'v3.3.0'
+
 mastodon_db: "{{ mastodon_user }}_cuties_social"
 mastodon_db_port: 5432
 disable_hsts: "false"
 disable_letsencrypt: "false"
 enable_www_redirect: "true"
+
 mastodon_db_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           63646261303530326663613262353536383931313838323536396535333036396138386134363763
@@ -19,6 +22,7 @@ mastodon_db_password: !vault |
           62356163343064646565366439386436626462623038636236643538393938636434343564653834
           3332636538376230650a353261383038653930643739303034376137363866336264616332336233
           37656139653634656435623732303039313162656664336565383438366661316136
+
 mastodon_host: cuties.social
 
 mastodon_acme_server: 'https://api.buypass.com/acme/directory'
