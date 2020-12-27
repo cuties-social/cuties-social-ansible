@@ -37,11 +37,11 @@
 - name: patch instance serializer 2/2
   lineinfile:
     path: "{{ mastodon_path }}/app/serializers/rest/instance_serializer.rb"
-    regexp: ':languages, :registrations, :approval_required'
-    line: '             :languages, :registrations, :approval_required, {{ additional_serializers }}'
+    regexp: ':languages, :registrations, :approval_required, :invites_enabled'
+    line: '             :languages, :registrations, :approval_required, :invites_enabled, {{ additional_serializers }}'
 
 - name: patch obfuscatedCount
   lineinfile:
-    path: "{{ mastodon_path }}/app/javascript/mastodon/components/status_action_bar.js"
+    path: "{{ mastodon_path }}/app/javascript/mastodon/components/animated_number.js"
     regexp: "return '1\\+';"
     line: "    return count;"

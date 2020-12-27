@@ -5,7 +5,7 @@
     regexp: 'MAX_CHARS = '
     line: '  MAX_CHARS = (ENV["MAX_TOOT_CHARS"] || 500).to_i'
 
-- name: patch compose form 1/4
+- name: patch compose form 1/3
   blockinfile:
     path: "{{ mastodon_path }}/app/javascript/mastodon/features/compose/components/compose_form.js"
     block: |
@@ -14,20 +14,14 @@
     insertbefore: "import Icon from 'mastodon/components/icon';"
     marker: "// {mark} ANSIBLE MANAGED BLOCK"
 
-- name: patch compose form 2/4
+- name: patch compose form 2/3
   lineinfile:
     path: "{{ mastodon_path }}/app/javascript/mastodon/features/compose/components/compose_form.js"
-    regexp: if \(isSubmitting \|\| isUploading \|\| isChangingUpload \|\| length\(fulltext\) > .* \|\| \(fulltext.length !== 0 && fulltext.trim\(\).length === 0 && !anyMedia\)\) {
-    line: "    if (isSubmitting || isUploading || isChangingUpload || length(fulltext) > maxChars || (fulltext.length !== 0 && fulltext.trim().length === 0 && !anyMedia)) {"
+    regexp: return !\(isSubmitting \|\| isUploading \|\| isChangingUpload \|\| length\(fulltext\) > .* \|\| \(isOnlyWhitespace && !anyMedia\)\);
+    line: "    return !(isSubmitting || isUploading || isChangingUpload || length(fulltext) > maxChars || (isOnlyWhitespace && !anyMedia));"
 
-- name: patch compose form 3/4
+- name: patch compose form 3/3
   lineinfile:
     path: "{{ mastodon_path }}/app/javascript/mastodon/features/compose/components/compose_form.js"
-    regexp: const disabledButton = disabled \|\| this.props.isUploading \|\| this.props.isChangingUpload \|\| length\(text\) > .* \|\| \(text.length !== 0 && text.trim\(\).length === 0 && !anyMedia\);
-    line: "    const disabledButton = disabled || this.props.isUploading || this.props.isChangingUpload || length(text) > maxChars || (text.length !== 0 && text.trim().length === 0 && !anyMedia);"
-
-- name: patch compose form 4/4
-  lineinfile:
-    path: "{{ mastodon_path }}/app/javascript/mastodon/features/compose/components/compose_form.js"
-    regexp: <div className='character-counter__wrapper'><CharacterCounter max=\{.*\} text={text} \/><\/div>
-    line: "         <div className='character-counter__wrapper'><CharacterCounter max={maxChars} text={text} /></div>"
+    regexp: <div className='character-counter__wrapper'>
+    line: "         <div className='character-counter__wrapper'><CharacterCounter max={maxChars} text={this.getFulltextForCharacterCounting()} /></div>"
