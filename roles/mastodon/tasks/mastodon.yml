@@ -57,9 +57,15 @@
 - include_tasks: patches/main.yml
   when: mastodon_patches_enable
 
-- name: Migrate database
-  shell: "RAILS_ENV=production ~/.rbenv/shims/bundle exec rails db:migrate"
-  args:
+- name: Run pre-deployment migrations
+  command:
+    argv:
+      - SKIP_POST_DEPLOYMENT_MIGRATIONS=true
+      - RAILS_ENV=production
+      - ~/.rbenv/shims/bundle
+      - exec
+      - rails
+      - db:migrate
     chdir: "{{ mastodon_path }}"
 
 - name: Precompile assets
@@ -99,8 +105,31 @@
   become: true
   become_user: root
 
+- name: Clear cache
+  command:
+    argv:
+      - RAILS_ENV=production
+      - bin/tootctl
+      - cache
+      - clear
+    chdir: "{{ mastodon_path }}"
+
+- name: Run post-deployment migrations
+  command:
+    argv:
+      - RAILS_ENV=production
+      - ~/.rbenv/shims/bundle
+      - exec
+      - rails
+      - db:migrate
+    chdir: "{{ mastodon_path }}"
 
 - name: import old statuses to elasticsearch
-  shell: "RAILS_ENV=production ~/.rbenv/shims/bundle exec rake chewy:sync"
-  args:
+  command:
+    argv:
+      - RAILS_ENV=production
+      - ~/.rbenv/shims/bundle
+      - exec
+      - rake
+      - chewy:sync
     chdir: "{{ mastodon_path }}"
