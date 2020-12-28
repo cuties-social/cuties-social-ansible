@@ -111,6 +111,7 @@
     chdir: "{{ mastodon_path }}"
   environment:
     RAILS_ENV: production
+    PATH: '{{ mastodon_home }}/.rbenv/shims:{{ ansible_env.PATH }}'
 
 - name: Run post-deployment migrations
   command:
