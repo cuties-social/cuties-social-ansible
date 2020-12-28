@@ -35,8 +35,8 @@
 - name: patch profile page 1/2
   lineinfile:
     path: "{{ mastodon_path }}/app/views/settings/profiles/show.html.haml"
-    regexp: '= f.input :display_name, wrapper: :with_label, input_html: { maxlength: .* }, hint: false'
-    line: '      = f.input :display_name, wrapper: :with_label, input_html: { maxlength: Account::MAX_DISPLAY_NAME_LENGTH }, hint: false'
+    regexp: '= f.input :display_name, wrapper: :with_label, input_html: { maxlength: .*, data: { default: @account.username } }, hint: false'
+    line: '      = f.input :display_name, wrapper: :with_label, input_html: { maxlength: Account::MAX_DISPLAY_NAME_LENGTH, data: { default: @account.username } }, hint: false'
 
 - name: patch profile page 2/2
   lineinfile:
@@ -54,4 +54,4 @@
   lineinfile:
     path: "{{ mastodon_path }}/spec/models/account_spec.rb"
     regexp: account = Fabricate.build\(:account, note
-    line: '        account = Fabricate.build(:account, note: Faker::Lorem.characters({{ mastodon_bio_character_limit+1 }}))'
+    line: '        account = Fabricate.build(:account, note: Faker::Lorem.characters(number: {{ mastodon_bio_character_limit+1 }}))'
