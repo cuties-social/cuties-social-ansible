@@ -56,13 +56,14 @@
 - name: Run pre-deployment migrations
   command:
     argv:
-      - SKIP_POST_DEPLOYMENT_MIGRATIONS=true
-      - RAILS_ENV=production
       - ~/.rbenv/shims/bundle
       - exec
       - rails
       - db:migrate
     chdir: "{{ mastodon_path }}"
+  environment:
+    SKIP_POST_DEPLOYMENT_MIGRATIONS: true
+    RAILS_ENV: production
 
 - name: Precompile assets
   shell: "RAILS_ENV=production ~/.rbenv/shims/bundle exec rails assets:precompile"
@@ -104,28 +105,31 @@
 - name: Clear cache
   command:
     argv:
-      - RAILS_ENV=production
       - bin/tootctl
       - cache
       - clear
     chdir: "{{ mastodon_path }}"
+  environment:
+    RAILS_ENV: production
 
 - name: Run post-deployment migrations
   command:
     argv:
-      - RAILS_ENV=production
       - ~/.rbenv/shims/bundle
       - exec
       - rails
       - db:migrate
     chdir: "{{ mastodon_path }}"
+  environment:
+    RAILS_ENV: production
 
 - name: import old statuses to elasticsearch
   command:
     argv:
-      - RAILS_ENV=production
       - ~/.rbenv/shims/bundle
       - exec
       - rake
       - chewy:sync
     chdir: "{{ mastodon_path }}"
+  environment:
+    RAILS_ENV: production
