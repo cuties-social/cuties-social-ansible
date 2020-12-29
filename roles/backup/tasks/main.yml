@@ -1,9 +1,18 @@
 ---
-- name: Copy ssh key for storagebox
+- name: Install restic utility
+  apt:
+    name: restic
+    state: present
+
+- name: Copy key for restic
   copy:
-    content: "{{backup_ssh_key}}"
-    dest: /root/.ssh/id_rsa
-    owner: "{{mastodon_user}}"
+    content: "{{ backup_restic_key }}"
+    dest: "/root/restic-key"
+
+- name: Create file containing paths to backup
+  template:
+    src: backup_paths.j2
+    dest: "{{ mastodon_home }}/backup_paths"
     mode: '0600'
 
 - name: Copy backupscript
