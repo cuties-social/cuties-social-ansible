@@ -1,12 +1,13 @@
 #!/bin/bash
-DATUM=$(date +"%Y-%m-%d")
 
-systemctl stop mastodon-*
-su - mastodon -c "cd {{mastodon_home}} && pg_dump -Fc {{mastodon_db}} > backup.dump"
-systemctl start mastodon-web mastodon-sidekiq mastodon-streaming
+cd {{ mastodon_home }};
 
-rsync -e 'ssh -p23 -o StrictHostKeyChecking=no' -Prvh {{mastodon_home}}/backup.dump {{backup_target}}:$DATUM/
-rsync -e 'ssh -p23 -o StrictHostKeyChecking=no' -Prvh {{mastodon_home}}/live {{backup_target}}:$DATUM/
-rsync -e 'ssh -p23 -o StrictHostKeyChecking=no' -Prvh /etc/nginx/sites-available {{backup_target}}:$DATUM/
-rsync -e 'ssh -p23 -o StrictHostKeyChecking=no' -Prvh /etc/elasticsearch/jvm.options {{backup_target}}:$DATUM/
-rsync -e 'ssh -p23 -o StrictHostKeyChecking=no' -Prvh /var/lib/redis/dump.rdb {{backup_target}}:$DATUM/
+SERVICES="mastodon-web mastodon-sidekiq mastodon-streaming"
+
+systemctl stop $SERVICES
+su - mastodon -c "cd {{ mastodon_home }} && pg_dump -Fc {{ mastodon_db }} > backup.dump"
+systemctl start $SERVICES
+
+
+restic init --password-file /root/restic-key --repo {{ backup_restic_repo }}
+restic backup --password-file /root/restic-key --repo {{ backup_restic_repo }} --files-from {{ mastodon_home }}/backup_paths
