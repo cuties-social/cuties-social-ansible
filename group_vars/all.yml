@@ -324,11 +324,7 @@ wireguard_endpoint_public_key: !vault |
 
 users:
 - name: 'n0emis'
-  state: 'present'
-  public_key: |
-    ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEcOPtW5FWNIdlMQFoqeyA1vHw+cA8ft8oXSbXPzQNL9 n0emis@n0emis.eu
-  shell: /usr/bin/zsh
-  sudo: yes
+  state: 'absent'
 - name: 'isa'
   state: 'present'
   public_key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGrvhqC/tZzpLMs/qy+1xNSVi2mfn8LXPIEhh7dcGn9e'
