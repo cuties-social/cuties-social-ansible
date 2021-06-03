@@ -1,4 +1,25 @@
 ---
+- name: Ensure certbot apt packages are not present
+  apt:
+    name:
+      - cerbot
+      - python3-certbot
+      - python-certbot-nginx
+      - python3-certbot-nginx
+    state: absent
+
+- name: Ensure pip is the latest version
+  pip:
+    name: pip
+    state: latest
+    executable: pip3
+
+- name: Install certbot from pip
+  pip:
+    name: certbot
+    state: latest
+    executable: pip3
+
 - name: Check for letsencrypt cert
   stat: path=/etc/letsencrypt/live/{{ mastodon_host }}/fullchain.pem
   register: letsencrypt_cert
