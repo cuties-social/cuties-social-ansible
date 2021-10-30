@@ -1,7 +1,7 @@
 ---
 - name: Clone mastodon
   git:
-    repo: "https://github.com/tootsuite/mastodon.git"
+    repo: "https://github.com/mastodon/mastodon.git"
     dest: "{{ mastodon_path }}"
     clone: true
     force: true
