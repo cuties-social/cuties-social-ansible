@@ -1,13 +1,29 @@
-##### #####
-####   ####                    _____ ____  _____
-###     ###     ___  ___  ___ /  __//  _ \/  __/
-##   #   ##    / __|/ __|/ __|| |  _| / \||  \
-#   ###   #   | (__| (__| (__ | |_//| \_/||  /_
-#    #    #    \___|\___|\___|\____\\____/\____\.de
-#         #
-##       ##
-##  # #  ##
-#  ## ##  #        {{ ansible_fqdn }}
-#  ## ##  #
-# ####### #
- 
+            _   _
+  ___ _   _| |_(_) ___  ___
+ / __| | | | __| |/ _ \/ __|
+| (__| |_| | |_| |  __/\__ \
+ \___|\__,_|\__|_|\___||___/
+
+                       _       _
+        ___  ___   ___(_) __ _| |
+       / __|/ _ \ / __| |/ _` | |
+      _\__ \ (_) | (__| | (_| | |
+     (_)___/\___/ \___|_|\__,_|_|
+
+                                           .
+                                ;.  .,   ,x:
+                             cd'NX. kX :OK,
+                          ;dkkk,Xocl,o0K0
+                        ckkxdkk;,ol.0KKo,
+             ..',,',cloookkd;d:;c,.c:l:c;
+          'clllllll,',;lkkl,:cllll;llll:c.
+        .lllll;;;;;;',::::llllllc,:cll,,;'
+     .:c,llllllllllll:,lllllllllc:,cllllll,
+    :kkd,lllllllllllll:;lll,llllllllllllllll.
+  .lkkk,llllllllllllll;:ll:'llllllllllllcl:l
+ 'kkkkk::lll,:llllll:'':cll:';;;;;;;';:cc:,
+ :kkkkkkocccd,llllc;cll;..'lllllllll,.....'.
+  kkkkkkkkkkx                      ..'.
+    xl. ol
+
+{{ ansible_fqdn }}

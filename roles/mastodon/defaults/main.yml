@@ -8,3 +8,4 @@ mastodon_bio_character_limit: 500
 mastodon_max_profile_fields: 4
 
 mastodon_acme_server: 'https://acme-v02.api.letsencrypt.org/directory'
+node_version: "12.x"
