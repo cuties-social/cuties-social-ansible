@@ -58,4 +58,4 @@
     minute: "15"
     hour: "0"
     day: "*/3"
-    job: "letsencrypt renew && service nginx reload"
+    job: "certbot renew && service nginx reload"
