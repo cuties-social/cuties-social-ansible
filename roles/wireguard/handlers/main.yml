@@ -8,3 +8,8 @@
   service:
     name: wg-quick@wg0
     enabled: yes
+
+- name: disable wireguard
+  service:
+    name: wg-quick@wg0
+    enabled: no
