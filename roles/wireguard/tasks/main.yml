@@ -1,26 +1,20 @@
 ---
-- name: Install additional packages (Ubuntu)
+- name: uninstall wireguard (Ubuntu)
   when: ansible_distribution == 'Ubuntu'
   apt:
     pkg:
       - linux-headers-generic
       - wireguard-tools
       - wireguard-dkms
-    state: present
-  notify:
-    - restart wireguard
-    - enable wireguard
+    state: absent
 
-- name: create configuration file
-  template:
-    src: wg0.conf.j2
+- name: delete configuration file
+  file:
     dest: /etc/wireguard/wg0.conf
-    owner: root
-    mode: 0600 # contains private key
-  notify:
-    - restart wireguard
+    state: absent
 
-- name: Allow traffic though wireguard in firewall
+- name: remove allow traffic though wireguard in firewall
   ufw:
     rule: allow
     from_ip: '192.168.123.1'
+    delete: yes
