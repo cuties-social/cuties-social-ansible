@@ -38,6 +38,20 @@
   become: true
   become_user: root
 
+- name: Install systemd elasticsearch-index Service Files
+  template:
+    src: systemd/mastodon-elasticsearch.service.j2
+    dest: /etc/systemd/system/mastodon-elasticsearch.service
+  become: true
+  become_user: root
+  register: elasticsearch_import_service
+
+- name: Ensure mastodon-elasticsearch.service is enabled
+  systemd:
+    name: mastodon-elasticsearch.service
+    daemon_reload: elasticsearch_import_service.changed
+    enabled: true
+
 - name: Media cleanup cronjob
   cron:
     name: "media cleanup"
@@ -70,10 +84,12 @@
   args:
     chdir: "{{ mastodon_path }}"
 
-- name: Create elasticsearch index
-  shell: "RAILS_ENV=production ~/.rbenv/shims/bundle exec rake chewy:upgrade"
-  args:
-    chdir: "{{ mastodon_path }}"
+- name: Create elasticsearch index in background
+  systemd:
+    name: mastodon-elasticsearch.service
+    state: restarted
+  become: true
+  become_user: root
 
 - name: Enable and restart mastodon-web
   systemd:

@@ -1,0 +1,16 @@
+[Unit]
+Description=Create mastodon elasticsearch index
+After=elasticsearch.service
+After=system-postgresql.slice
+
+[Service]
+Type=oneshot
+User=mastodon
+WorkingDirectory={{ mastodon_path }}
+Environment="RAILS_ENV=production"
+ExecStart={{ mastodon_home }}/.rbenv/shims/bundle exec rake chewy:upgrade
+StandardOutput=journal
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
