@@ -40,7 +40,7 @@
   check_mode: no
 
 - name: Install Ruby {{ ruby_version }}
-  shell: "~/.rbenv/bin/rbenv install {{ ruby_version }}"
+  shell: "RUBY_CONFIGURE_OPTS=--with-jemalloc ~/.rbenv/bin/rbenv install {{ ruby_version }}"
   args:
     executable: /bin/bash
   when: ruby_installed is failed

@@ -1,7 +1,7 @@
 ---
-ruby_version: 2.7.2
-rbenv_version: v1.1.2
-ruby_build_version: v20201225
+ruby_version: 3.0.3
+rbenv_version: v1.2.0
+ruby_build_version: 20220324
 os_family: "{{ ansible_os_family|lower }}"
 mastodon_user: "mastodon"
 mastodon_home: "/home/{{ mastodon_user }}"
