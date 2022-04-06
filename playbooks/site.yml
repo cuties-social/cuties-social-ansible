@@ -25,24 +25,24 @@
   tags:
     - redis
 
-- hosts: all
-  roles:
-    - elasticsearch
-  vars:
-    update_java: true
-    es_java_install: true
-    es_version: 7.17.2
-    es_allow_downgrades: true
-    es_data_dirs:
-      - "/var/elasticsearch/data"
-    es_log_dir: "/var/log/elasticsearch/"
-    es_config:
-      node.name: "node1"
-      cluster.name: "cutes-cluster"
-      node.master: true
-    es_heap_size: 1g
-  tags:
-    - elasticsearch
+      #- hosts: all
+      #  roles:
+      #    - elasticsearch
+      #  vars:
+      #    update_java: true
+      #    es_java_install: true
+      #    es_version: 7.17.2
+      #    es_allow_downgrades: true
+      #    es_data_dirs:
+      #      - "/var/elasticsearch/data"
+      #    es_log_dir: "/var/log/elasticsearch/"
+      #    es_config:
+      #      node.name: "node1"
+      #      cluster.name: "cutes-cluster"
+      #      node.master: true
+      #    es_heap_size: 1g
+      #  tags:
+      #    - elasticsearch
 
 - hosts: all
   vars_files:

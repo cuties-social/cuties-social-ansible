@@ -37,6 +37,7 @@ packages:
   - package: "yarn"
   - package: "zlib1g-dev"
   - package: "vnstat"
+  - package: "libjemalloc-dev"
 
 
 postgres:

@@ -46,11 +46,21 @@
   become_user: root
   register: elasticsearch_import_service
 
+
 - name: Ensure mastodon-elasticsearch.service is enabled
   systemd:
     name: mastodon-elasticsearch.service
-    daemon_reload: elasticsearch_import_service.changed
+    daemon_reload: true # that isn't propperly idempotent but will work and I hate ansible a bit right now
     enabled: true
+    masked: false
+  when: mastodon_es_enabled
+
+- name: Ensure mastodon-elasticsearch.service is not enabled
+  systemd:
+    name: mastodon-elasticsearch.service
+    enabled: false
+    masked: true
+  when: not mastodon_es_enabled
 
 - name: Media cleanup cronjob
   cron:
@@ -84,12 +94,11 @@
   args:
     chdir: "{{ mastodon_path }}"
 
-- name: Create elasticsearch index in background
-  systemd:
-    name: mastodon-elasticsearch.service
-    state: restarted
-  become: true
-  become_user: root
+- name: Create elasticsearch index
+  shell: "RAILS_ENV=production ~/.rbenv/shims/bundle exec rake chewy:upgrade"
+  args:
+    chdir: "{{ mastodon_path }}"
+  when: mastodon_es_enabled
 
 - name: Enable and restart mastodon-web
   systemd:
@@ -140,13 +149,10 @@
   environment:
     RAILS_ENV: production
 
-- name: import old statuses to elasticsearch
-  command:
-    argv:
-      - ~/.rbenv/shims/bundle
-      - exec
-      - rake
-      - chewy:sync
-    chdir: "{{ mastodon_path }}"
-  environment:
-    RAILS_ENV: production
+- name: Import old statuses into eslasticsearch
+  systemd:
+    name: mastodon-elasticsearch.service
+    state: restarted
+  become: true
+  become_user: root
+  when: mastodon_es_enabled

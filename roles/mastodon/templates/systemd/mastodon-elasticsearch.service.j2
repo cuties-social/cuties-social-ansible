@@ -1,5 +1,5 @@
 [Unit]
-Description=Create mastodon elasticsearch index
+Description=Import mastodon posts to elasticsearch
 After=elasticsearch.service
 After=system-postgresql.slice
 
@@ -8,7 +8,7 @@ Type=oneshot
 User=mastodon
 WorkingDirectory={{ mastodon_path }}
 Environment="RAILS_ENV=production"
-ExecStart={{ mastodon_home }}/.rbenv/shims/bundle exec rake chewy:upgrade
+ExecStart={{ mastodon_home }}/.rbenv/shims/bundle exec rake chewy:sync
 StandardOutput=journal
 RemainAfterExit=true
 
