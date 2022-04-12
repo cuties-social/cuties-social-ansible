@@ -1,2 +1,2 @@
 [mastodon]
-cuties.social
+cuties.social ansible_user=root

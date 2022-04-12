@@ -1,12 +1,11 @@
 ---
-- name: Install packages
+- name: Install packages # TODO: Make more effective!
   package:
-    name: "{{ item.package }}"
+    name: "{{ packages }}"
     update_cache: yes
     cache_valid_time: 3600
     state: latest
     install_recommends: no
-  with_items: "{{ packages }}"
 
 - name: nodejs alternative
   alternatives:

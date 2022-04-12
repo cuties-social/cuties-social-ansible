@@ -7,7 +7,7 @@ mastodon_user: "mastodon"
 mastodon_home: "/home/{{ mastodon_user }}"
 mastodon_db_user: "{{ mastodon_user }}"
 mastodon_path: "{{ mastodon_home }}/live"
-mastodon_version: 'v3.5.0'
+mastodon_version: 'v3.5.1'
 
 mastodon_db: "{{ mastodon_user }}_cuties_social"
 mastodon_db_port: 5432
@@ -88,7 +88,7 @@ mastodon_smtp_password: !vault |
           36653834313466366432323865313565663561343131326538333430333265616132353930613763
           65646630373133623032
 mastodon_smtp_from: "mastodon@{{ mastodon_host }}"
-mastodon_es_enabled: false
+mastodon_es_enabled: true
 mastodon_es_host: localhost
 mastodon_es_port: 9200
 

@@ -52,7 +52,8 @@
     name: mastodon-elasticsearch.service
     daemon_reload: true # that isn't propperly idempotent but will work and I hate ansible a bit right now
     enabled: true
-    masked: false
+  become: true
+  become_user: root
   when: mastodon_es_enabled
 
 - name: Ensure mastodon-elasticsearch.service is not enabled
@@ -94,10 +95,14 @@
   args:
     chdir: "{{ mastodon_path }}"
 
-- name: Create elasticsearch index
-  shell: "RAILS_ENV=production ~/.rbenv/shims/bundle exec rake chewy:upgrade"
-  args:
-    chdir: "{{ mastodon_path }}"
+- name: Create and populate elasticsearch index
+  systemd:
+    name: mastodon-elasticsearch.service
+    state: restarted
+    enabled: true
+    masked: false
+  become: true
+  become_user: root
   when: mastodon_es_enabled
 
 - name: Enable and restart mastodon-web
@@ -148,11 +153,3 @@
     chdir: "{{ mastodon_path }}"
   environment:
     RAILS_ENV: production
-
-- name: Import old statuses into eslasticsearch
-  systemd:
-    name: mastodon-elasticsearch.service
-    state: restarted
-  become: true
-  become_user: root
-  when: mastodon_es_enabled

@@ -4,11 +4,11 @@ After=elasticsearch.service
 After=system-postgresql.slice
 
 [Service]
-Type=oneshot
+Type=simple
 User=mastodon
 WorkingDirectory={{ mastodon_path }}
 Environment="RAILS_ENV=production"
-ExecStart={{ mastodon_home }}/.rbenv/shims/bundle exec rake chewy:sync
+ExecStart={{ mastodon_home }}/.rbenv/shims/bundle exec bin/tootctl search deploy
 StandardOutput=journal
 RemainAfterExit=true
 
